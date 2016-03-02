@@ -13,3 +13,5 @@ junit-reporting-handlebars/target/
 cucumber-reporting-handlebars/target/
 *.prefs
 commons-reporting-handlebars/src/main/resources/web/
+commons-reporting-handlebars/src/main/resources/web-resource/*.js
+commons-reporting-handlebars/src/main/resources/web-resource/boo*.css

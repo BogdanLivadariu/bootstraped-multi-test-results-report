@@ -2,10 +2,14 @@ package com.github.bogdanlivadariu.reporting.commons;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
 
 public class ResourceUtil {
+
+    private final static String RESOURCE_DIR = "/web-resource/";
 
     public static enum WEB_RESOURCE {
         BOOTSTRAP_THEME_CSS("bootstrap-theme.min.css"),
@@ -16,7 +20,8 @@ public class ResourceUtil {
         HIGHCHARTS_EXPORTING("exporting.js"),
         HIGHCHARTS_3D("highcharts-3d.js"),
         HIGHCHARTS_JS("highcharts.js"),
-        JQUERY("jquery.min.js");
+        JQUERY("jquery.min.js"),
+        STYLE("style.css");
 
         private final String name;
 
@@ -30,12 +35,16 @@ public class ResourceUtil {
         }
     }
 
-    public static void copyResource(WEB_RESOURCE source, String destPath) throws IOException {
-        File sourceFile =
-            new File(ResourceUtil.class.getResource("/web/" + source.toString()).getPath());
-        File destFile = new File(destPath);
-        File tmpFile = new File(destFile.getAbsoluteFile() + File.separator + sourceFile.getName());
+    public static void copyResource(WEB_RESOURCE source, String destPath) throws URISyntaxException, IOException {
+        InputStream sourceInputStream = ResourceUtil.class.getResourceAsStream(RESOURCE_DIR + source.toString());
 
-        FileUtils.copyFile(sourceFile, tmpFile);
+        File dest = new File(destPath + File.separator + source.toString());
+        FileUtils.copyInputStreamToFile(sourceInputStream, dest);
+    }
+
+    public static void copyAllResources(String destPath) throws URISyntaxException, IOException {
+        for (WEB_RESOURCE res : WEB_RESOURCE.values()) {
+            copyResource(res, destPath);
+        }
     }
 }

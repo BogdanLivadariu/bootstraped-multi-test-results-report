@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import com.github.bogdanlivadariu.reporting.commons.ResourceUtil;
 import com.github.bogdanlivadariu.reporting.cucumber.helpers.Constants;
 import com.github.bogdanlivadariu.reporting.cucumber.helpers.Helpers;
 import com.github.bogdanlivadariu.reporting.cucumber.json.models.Feature;
@@ -56,6 +58,16 @@ public class CucumberReportBuilder {
 
     public List<Feature> getProcessedFeatures() {
         return processedFeatures;
+    }
+
+    private void copyWebResources() throws IOException, URISyntaxException {
+        String summaryPath = REPORTS_SUMMARY_PATH + "res/";
+        String overviewPath = REPORTS_OVERVIEW_PATH + "res/";
+        String tagpath = FEATURE_TAG_REPORT + "res/";
+
+        ResourceUtil.copyAllResources(summaryPath);
+        ResourceUtil.copyAllResources(overviewPath);
+        ResourceUtil.copyAllResources(tagpath);
     }
 
     private void writeFeatureSummaryReports() throws IOException {
@@ -171,8 +183,10 @@ public class CucumberReportBuilder {
     /**
      * @return true if all the features have passed, false if at least one has failed.
      * @throws IOException
+     * @throws URISyntaxException
      */
-    public boolean writeReportsOnDisk() throws IOException {
+    public boolean writeReportsOnDisk() throws IOException, URISyntaxException {
+        copyWebResources();
         writeFeatureSummaryReports();
         writeFeatureOverviewReport();
         writeFeaturePassedReport();

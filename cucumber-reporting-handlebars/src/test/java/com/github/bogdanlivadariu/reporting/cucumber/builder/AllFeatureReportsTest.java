@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AllFeatureReportsTest {
+
     private List<String> jsonReports;
 
     private String firstReport;
@@ -27,10 +29,10 @@ public class AllFeatureReportsTest {
     public void setup() throws JAXBException, IOException {
         jsonReports = new ArrayList<>();
 
-        firstReport = AllFeatureReportsTest.class.getResource("/result.json").getPath();
+        // firstReport = AllFeatureReportsTest.class.getResource("/result.json").getPath();
         secondReport = AllFeatureReportsTest.class.getResource("/cucumber.json").getPath();
 
-        jsonReports.add(firstReport);
+        // jsonReports.add(firstReport);
         jsonReports.add(secondReport);
 
         builder = new CucumberReportBuilder(jsonReports, "output");
@@ -45,11 +47,6 @@ public class AllFeatureReportsTest {
     @Test
     public void featureSizeTest() {
         assertEquals(4, reports.getFeatures().size());
-        reports.getPageTitle();
-        reports.getScenariosTotal();
-        reports.getScenariosTotalFailed();
-        reports.getScenariosTotalPassed();
-        reports.getStepsTotal();
     }
 
     @Test
@@ -74,7 +71,7 @@ public class AllFeatureReportsTest {
     }
 
     @Test
-    public void builderShouldFail() throws IOException {
+    public void builderShouldFail() throws IOException, URISyntaxException {
         assertFalse(builder.writeReportsOnDisk());
     }
 }
